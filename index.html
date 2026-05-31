@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mount Fancy ✨ The Fanciest Spot in Town</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #F5C842;
+    --deep: #1A0A2E;
+    --pink: #FF6B9D;
+    --mint: #3DFFC0;
+    --cream: #FFF8F0;
+    --purple: #7B2FBE;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--deep);
+    color: var(--cream);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 20px; height: 20px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor.big { width: 50px; height: 50px; }
+
+  /* Stars background */
+  .stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--d) var(--delay) infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+
+  /* HERO */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: radial-gradient(ellipse at 50% 0%, #3a0070 0%, var(--deep) 65%);
+  }
+
+  .hero-badge {
+    background: var(--gold);
+    color: var(--deep);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    animation: badgePop 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+  }
+  @keyframes badgePop {
+    from { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+    to { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--pink) 50%, var(--mint) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeUp 0.8s ease 0.5s both;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: rgba(255,255,255,0.7);
+    margin-top: 1rem;
+    animation: fadeUp 0.8s ease 0.7s both;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-cta {
+    margin-top: 2.5rem;
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.8s ease 0.9s both;
+  }
+
+  .btn {
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--deep);
+  }
+  .btn-gold:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 10px 30px rgba(245,200,66,0.4); }
+  .btn-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  .btn-outline:hover { border-color: var(--pink); color: var(--pink); transform: translateY(-3px); }
+
+  /* Floating items */
+  .floaties {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; overflow: hidden;
+  }
+  .floatie {
+    position: absolute;
+    font-size: 2rem;
+    animation: floatAround var(--dur) var(--del) infinite ease-in-out;
+    opacity: 0.6;
+  }
+  @keyframes floatAround {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33% { transform: translateY(-20px) rotate(10deg); }
+    66% { transform: translateY(10px) rotate(-5deg); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(26,10,46,0.7);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, var(--gold), var(--pink));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* SECTIONS */
+  section {
+    position: relative; z-index: 1;
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mint);
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  /* SERVICES */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 20px;
+  }
+  .card:hover { transform: translateY(-8px) rotate(-0.5deg); border-color: var(--pink); }
+  .card:hover::before { opacity: 0.15; }
+  .card-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+  .card p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.6; position: relative; z-index: 1; }
+  .card-price {
+    margin-top: 1.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    font-size: 1.1rem;
+    position: relative; z-index: 1;
+  }
+
+  /* TESTIMONIALS */
+  .testimonials-wrap {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .testimonial {
+    background: linear-gradient(135deg, rgba(123,47,190,0.3), rgba(255,107,157,0.15));
+    border: 1px solid rgba(255,107,157,0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+  }
+  .testimonial::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: var(--pink);
+    opacity: 0.3;
+    position: absolute;
+    top: 0.5rem; left: 1.5rem;
+    line-height: 1;
+  }
+  .testimonial p { font-style: italic; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 1rem; }
+  .testimonial-author { font-weight: 700; color: var(--gold); font-size: 0.9rem; }
+  .stars-rating { color: var(--gold); letter-spacing: 2px; margin-bottom: 0.8rem; }
+
+  /* CONTACT */
+  .contact-box {
+    background: linear-gradient(135deg, rgba(61,255,192,0.1), rgba(245,200,66,0.1));
+    border: 1px solid rgba(61,255,192,0.3);
+    border-radius: 24px;
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+  @media (max-width: 680px) {
+    .contact-box { grid-template-columns: 1fr; padding: 2rem; }
+    .nav-links { display: none; }
+  }
+
+  .contact-info h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 1.5rem; }
+  .contact-detail {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1rem; color: rgba(255,255,255,0.8);
+  }
+  .contact-detail span:first-child { font-size: 1.5rem; }
+
+  input, textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--mint);
+    box-shadow: 0 0 0 3px rgba(61,255,192,0.15);
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35); }
+  textarea { resize: vertical; min-height: 120px; }
+
+  /* POPUP OVERLAY */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,10,46,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .overlay.active { opacity: 1; pointer-events: all; }
+
+  .popup {
+    background: linear-gradient(135deg, #2D0E5A, #1A0A2E);
+    border: 2px solid var(--gold);
+    border-radius: 24px;
+    padding: 2.5rem;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.7) rotate(-5deg);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative;
+  }
+  .overlay.active .popup { transform: scale(1) rotate(0deg); }
+
+  .popup-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: rgba(255,255,255,0.1);
+    border: none; color: white;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .popup-close:hover { background: var(--pink); }
+
+  .popup-emoji { font-size: 4rem; margin-bottom: 1rem; display: block; animation: wiggle 1s infinite; }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+  .popup h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 0.8rem; }
+  .popup p { color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; line-height: 1.6; }
+
+  /* WELCOME POPUP */
+  #welcome-popup .popup { border-color: var(--mint); }
+  #welcome-popup .popup-emoji { animation: bounceIn 0.8s ease both; }
+  @keyframes bounceIn {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 10px; height: 10px;
+    top: -20px;
+    animation: confettiFall var(--dur) var(--del) linear forwards;
+    z-index: 9998;
+    pointer-events: none;
+    border-radius: var(--br);
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg) translateX(var(--dx)); opacity: 0; }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MAP placeholder */
+  .map-placeholder {
+    background: rgba(61,255,192,0.08);
+    border: 2px dashed rgba(61,255,192,0.3);
+    border-radius: 16px;
+    height: 220px;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+  }
+  .map-placeholder span { font-size: 3rem; }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.85rem;
+  }
+  footer strong { color: var(--gold); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--deep);
+    border: 2px solid var(--mint);
+    border-radius: 14px;
+    padding: 1rem 1.5rem;
+    color: white;
+    font-weight: 600;
+    z-index: 9000;
+    transform: translateX(200%);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    max-width: 280px;
+  }
+  .toast.show { transform: translateX(0); }
+
+  /* Scroll indicator */
+  .scroll-arrow {
+    position: absolute; bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+    color: rgba(255,255,255,0.4);
+    font-size: 1.5rem;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+  }
+
+  /* Wiggle btn */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245,200,66,0.4); }
+    50% { box-shadow: 0 0 0 12px rgba(245,200,66,0); }
+  }
+  .btn-gold { animation: pulse-glow 2s infinite; }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+
+<!-- Star background -->
+<div class="stars" id="stars"></div>
+
+<!-- WELCOME POPUP -->
+<div class="overlay active" id="welcome-popup">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('welcome-popup')">✕</button>
+    <span class="popup-emoji">✨</span>
+    <h3>Welcome to Mount Fancy!</h3>
+    <p>The most spectacular experience this side of the mountain. We're so glad you're here!</p>
+    <button class="btn btn-gold" onclick="closePopup('welcome-popup'); fireConfetti()">Let's Go! 🚀</button>
+  </div>
+</div>
+
+<!-- BOOKING POPUP -->
+<div class="overlay" id="booking-popup">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('booking-popup')">✕</button>
+    <span class="popup-emoji" style="animation: wiggle 1s infinite;">📅</span>
+    <h3>Book Your Experience</h3>
+    <p>Reserve your spot and get ready for something truly fancy!</p>
+    <input type="text" placeholder="Your name" style="text-align:left;">
+    <input type="date" style="text-align:left; color-scheme: dark;">
+    <button class="btn btn-gold" style="width:100%;" onclick="handleBooking()">Confirm Booking 🎉</button>
+  </div>
+</div>
+
+<!-- OFFER POPUP -->
+<div class="overlay" id="offer-popup">
+  <div class="popup" style="border-color: var(--pink);">
+    <button class="popup-close" onclick="closePopup('offer-popup')">✕</button>
+    <span class="popup-emoji">🎁</span>
+    <h3>Special Offer!</h3>
+    <p>Get <strong style="color:var(--gold);">20% OFF</strong> your first visit when you book today. Don't miss out!</p>
+    <button class="btn btn-gold" onclick="closePopup('offer-popup'); openPopup('booking-popup')">Claim Offer! 🔥</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">🎉 Booking confirmed! See you soon!</div>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">Mount Fancy ✦</div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="btn btn-gold" style="padding:10px 22px; font-size:0.85rem;" onclick="openPopup('booking-popup')">Book Now ✨</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="floaties">
+    <span class="floatie" style="left:5%;top:20%;--dur:4s;--del:0s">⭐</span>
+    <span class="floatie" style="left:15%;top:60%;--dur:5s;--del:1s">💎</span>
+    <span class="floatie" style="right:8%;top:25%;--dur:6s;--del:0.5s">✨</span>
+    <span class="floatie" style="right:18%;top:65%;--dur:4.5s;--del:2s">🌟</span>
+    <span class="floatie" style="left:50%;top:15%;--dur:5.5s;--del:0.8s">🎩</span>
+    <span class="floatie" style="left:30%;top:75%;--dur:4s;--del:1.5s">🦋</span>
+    <span class="floatie" style="right:35%;top:80%;--dur:5s;--del:0.3s">🌸</span>
+  </div>
+
+  <div class="hero-badge">✦ Est. 2020 · Mount Fancy ✦</div>
+  <h1>Mount Fancy</h1>
+  <p class="hero-sub">Where every visit feels like a celebration. Premium experiences, handcrafted just for you.</p>
+  <div class="hero-cta">
+    <button class="btn btn-gold" onclick="openPopup('booking-popup')">Book a Visit 🌟</button>
+    <button class="btn btn-outline" onclick="openPopup('offer-popup')">See Today's Offer 🎁</button>
+  </div>
+
+  <div class="scroll-arrow">↓</div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label reveal">What We Offer</div>
+  <h2 class="reveal">Fancy. <em style="font-style:italic; color:var(--pink);">Elevated.</em> Unforgettable.</h2>
+  <p class="reveal" style="color:rgba(255,255,255,0.6); max-width:540px; line-height:1.7; margin-top:0.5rem;">
+    At Mount Fancy, we take every detail seriously so you don't have to. Pick your experience below.
+  </p>
+
+  <div class="services-grid">
+    <div class="card reveal">
+      <span class="card-icon">🍵</span>
+      <h3>The Fancy Lounge</h3>
+      <p>Hand-brewed teas, artisan coffees, and fresh pastries in a cozy mountain setting.</p>
+      <div class="card-price">From ₹299</div>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">💆</span>
+      <h3>Relaxation Suite</h3>
+      <p>Premium spa treatments tailored to melt away the day. Because you deserve it.</p>
+      <div class="card-price">From ₹999</div>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">🎉</span>
+      <h3>Private Events</h3>
+      <p>Birthdays, proposals, or just because — we make every gathering extraordinary.</p>
+      <div class="card-price">From ₹4,999</div>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">🛍️</span>
+      <h3>Fancy Gift Shop</h3>
+      <p>Curated local products, handmade goodies, and gifts people actually want.</p>
+      <div class="card-price">From ₹149</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;">
+    <div>
+      <div class="section-label reveal">Our Story</div>
+      <h2 class="reveal">Built on the Belief That <em style="color:var(--gold);">Fancy is for Everyone</em></h2>
+      <p class="reveal" style="color:rgba(255,255,255,0.65); line-height:1.8; margin-top:1rem;">
+        Mount Fancy was born from a simple idea: everyday moments deserve a little sparkle. 
+        Nestled right in the heart of the neighbourhood, we've been creating smiles, memories, 
+        and frankly, a lot of good vibes since 2020.
+      </p>
+      <p class="reveal" style="color:rgba(255,255,255,0.65); line-height:1.8; margin-top:1rem;">
+        Whether you're popping in for a quick coffee or planning an event — we treat every guest like royalty. 
+        No exceptions. No compromise. Just fancy.
+      </p>
+      <button class="btn btn-outline reveal" style="margin-top:2rem;" onclick="openPopup('offer-popup')">Our Specials 🌟</button>
+    </div>
+    <div class="reveal">
+      <div style="background:linear-gradient(135deg, var(--purple), var(--pink)); border-radius:24px; padding:3rem; text-align:center;">
+        <div style="font-size:4rem; margin-bottom:1rem;">🏔️</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:1rem;">
+          <div>
+            <div style="font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:var(--gold);">500+</div>
+            <div style="font-size:0.8rem; color:rgba(255,255,255,0.7); margin-top:4px;">Happy Customers</div>
+          </div>
+          <div>
+            <div style="font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:var(--mint);">4.9★</div>
+            <div style="font-size:0.8rem; color:rgba(255,255,255,0.7); margin-top:4px;">Average Rating</div>
+          </div>
+          <div>
+            <div style="font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:var(--pink);">5yr</div>
+            <div style="font-size:0.8rem; color:rgba(255,255,255,0.7); margin-top:4px;">In Business</div>
+          </div>
+          <div>
+            <div style="font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:white;">💯</div>
+            <div style="font-size:0.8rem; color:rgba(255,255,255,0.7); margin-top:4px;">Satisfaction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-label reveal">What People Say</div>
+  <h2 class="reveal">They <em style="color:var(--pink);">Love</em> Us 💕</h2>
+
+  <div class="testimonials-wrap">
+    <div class="testimonial reveal">
+      <div class="stars-rating">★★★★★</div>
+      <p>Honestly the vibe here is unmatched. Came for a birthday dinner and left feeling like we were in a five-star resort. Will be back every weekend!</p>
+      <div class="testimonial-author">— Priya S., Local Customer</div>
+    </div>
+    <div class="testimonial reveal">
+      <div class="stars-rating">★★★★★</div>
+      <p>The gift shop selections are SO thoughtful. Found the perfect anniversary present here that you wouldn't find anywhere else. Mount Fancy just gets it.</p>
+      <div class="testimonial-author">— Arjun K., Regular Visitor</div>
+    </div>
+    <div class="testimonial reveal">
+      <div class="stars-rating">★★★★★</div>
+      <p>Booked the private event space for a team outing and everyone was blown away. The staff went above and beyond to make it perfect. 10/10, no notes.</p>
+      <div class="testimonial-author">— Sneha M., Event Planner</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal">Find Us</div>
+  <h2 class="reveal">Come Say <em style="color:var(--gold);">Hello ✨</em></h2>
+
+  <div class="contact-box reveal">
+    <div class="contact-info">
+      <h3>Visit Mount Fancy</h3>
+      <div class="contact-detail">
+        <span>📍</span>
+        <span>12, Fancy Lane, Near the Big Tree, Your Neighbourhood</span>
+      </div>
+      <div class="contact-detail">
+        <span>📞</span>
+        <span>+91 98765 43210</span>
+      </div>
+      <div class="contact-detail">
+        <span>🕐</span>
+        <span>Mon – Sun: 9AM to 10PM</span>
+      </div>
+      <div class="contact-detail">
+        <span>📧</span>
+        <span>hello@mountfancy.in</span>
+      </div>
+
+      <div class="map-placeholder">
+        <span>🗺️</span>
+        <div>Google Map coming soon!<br><small>Find us on Google Maps: "Mount Fancy"</small></div>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:1.5rem;">Send a Message</h3>
+      <input type="text" placeholder="Your Name" id="msg-name">
+      <input type="tel" placeholder="Phone / WhatsApp">
+      <textarea placeholder="What's on your mind? 💬" id="msg-text"></textarea>
+      <button class="btn btn-gold" style="width:100%;" onclick="handleMessage()">Send Message 🚀</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:0.5rem;">Mount Fancy ✦</div>
+  <p>Made with 💛 for the community · <strong>© 2026 Mount Fancy</strong></p>
+  <p style="margin-top:0.5rem;">Built to attract, designed to impress 🌟</p>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('button, a, .card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+  });
+
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s;width:${1+Math.random()*3}px;height:${1+Math.random()*3}px;`;
+    starsEl.appendChild(s);
+  }
+
+  // Popups
+  function openPopup(id) {
+    document.getElementById(id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePopup(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) closePopup(o.id); });
+  });
+
+  // Confetti
+  function fireConfetti() {
+    const colors = ['#F5C842','#FF6B9D','#3DFFC0','#7B2FBE','#fff'];
+    for (let i = 0; i < 60; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.cssText = `
+        left:${Math.random()*100}vw;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        --dur:${1.5+Math.random()*2}s;
+        --del:${Math.random()*1}s;
+        --dx:${-100+Math.random()*200}px;
+        --br:${Math.random() > 0.5 ? '50%' : '2px'};
+        transform:rotate(${Math.random()*360}deg);
+        width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;
+      `;
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }
+  }
+
+  // Toast
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  function handleBooking() {
+    closePopup('booking-popup');
+    fireConfetti();
+    showToast('🎉 Booking confirmed! See you soon!');
+  }
+
+  function handleMessage() {
+    const name = document.getElementById('msg-name').value;
+    closePopup('offer-popup');
+    fireConfetti();
+    showToast(`✨ Got it${name ? ', ' + name : ''}! We'll be in touch!`);
+  }
+
+  // Offer popup after 8 seconds
+  setTimeout(() => {
+    if (!document.getElementById('welcome-popup').classList.contains('active')) {
+      openPopup('offer-popup');
+    }
+  }, 8000);
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
