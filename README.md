@@ -105,7 +105,7 @@ Mount-Fancy/
  Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/mount-fancy.git
+git clone https://github.com/sssxrxhhh07/mount-fancy.git
 ````
 
  Navigate to Project
